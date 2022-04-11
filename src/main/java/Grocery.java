@@ -36,4 +36,17 @@ public class Grocery {
                 ", expirationDate='" + expirationDate + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Grocery grocery = (Grocery) o;
+
+        if (name != null ? !name.equals(grocery.name) : grocery.name != null) return false;
+        if (price != null ? !price.equals(grocery.price) : grocery.price != null) return false;
+        if (type != null ? !type.equals(grocery.type) : grocery.type != null) return false;
+        return expirationDate != null ? expirationDate.equals(grocery.expirationDate) : grocery.expirationDate == null;
+    }
 }

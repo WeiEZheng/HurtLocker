@@ -31,4 +31,10 @@ public class GroceryTest extends TestCase {
                 '}';
         Assert.assertEquals(expected, actualOutput);
     }
+
+    public void testTestEquals() {
+        Grocery grocery = new Grocery(name, price, type, expirationDate);
+        Grocery grocery1 = new Grocery(name, price, type, expirationDate);
+        Assert.assertEquals(grocery,grocery1);
+    }
 }
