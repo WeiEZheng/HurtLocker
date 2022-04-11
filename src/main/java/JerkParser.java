@@ -1,13 +1,15 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class JerkParser {
+public class JerkParser<T> {
 
-    public List<String[]> splitAndGet(JerkSON jerkSON, String ... fieldNames){
+    public List<Map<String,String>> splitAndGet(JerkSON jerkSON, String ... fieldNames){
         String[] jerkSONStrings = split(jerkSON);
-        List<String[]> result = new ArrayList<>();
+        List<Map<String,String>> result = new ArrayList<>();
         for (int i=0; i< jerkSONStrings.length;i++){
             result.add(get(jerkSONStrings[i],fieldNames));
         }
@@ -19,21 +21,25 @@ public class JerkParser {
         return pattern.split(jerkSON.getJerkString());
     }
 
-    public String[] get(String jerkSONString, String ... fieldNames){
+    public Map<String,String> get(String jerkSONString, String ... fieldNames){
         String[] fields = fieldNames;
-        String[] result = new String[fields.length];
+        Map<String,String> result = new HashMap<>();
         for (int i = 0; i<fields.length; i++) {
-            result[i] = get(jerkSONString, fields[i]);
+            result.put(fields[i],get(jerkSONString, fields[i]));
         }
         return result;
     }
 
     public String get(String jerkSONString, String fieldName){
-        Pattern pattern = Pattern.compile("(?<="+fieldName+"[;:%@*^]).*?(?=[;:%@*^])", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("(?<="+fieldName+"[;:%@*^]).*?(?=[;:%@*^]|$)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(jerkSONString);
         if (matcher.find()){
             return matcher.group();
         }
         return "";
+    }
+
+    public T[] buildToObj(Builder<T> builder, List<Map<String,String>> itemProperties){
+        return builder.build(itemProperties);
     }
 }

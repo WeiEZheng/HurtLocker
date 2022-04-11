@@ -2,6 +2,7 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 
 import java.util.List;
+import java.util.Map;
 
 public class JerkParserTest extends TestCase {
     JerkParser jerkParser = new JerkParser();
@@ -20,17 +21,18 @@ public class JerkParserTest extends TestCase {
 
     public void testGetMultiple() {
         JerkSON jerkSON = new JerkSON("naMe:;price:3.23;type:Food^expiration:1/04/2016");
-        Assert.assertTrue("".equalsIgnoreCase(jerkParser.get(jerkSON.getJerkString(),"name", "price")[0]));
-        Assert.assertTrue("3.23".equalsIgnoreCase(jerkParser.get(jerkSON.getJerkString(),"name", "price")[1]));
+        Map<String,String> actual = jerkParser.get(jerkSON.getJerkString(), "name", "price");
+        Assert.assertTrue("".equalsIgnoreCase(actual.get("name")));
+        Assert.assertTrue("3.23".equalsIgnoreCase(actual.get("price")));
     }
 
     public void testSplitAndGet(){
         JerkSON jerkSON = new JerkSON("naMe:Milk;price:3.23;type:Food^expiration:1/04/2016" +
                 "##naMe:Milk2;price:3.24;type:Food^expiration:1/04/2016");
-        List<String[]> actual = jerkParser.splitAndGet(jerkSON, "name", "price");
-        Assert.assertTrue("Milk".equalsIgnoreCase(actual.get(0)[0]));
-        Assert.assertTrue("3.23".equalsIgnoreCase(actual.get(0)[1]));
-        Assert.assertTrue("Milk2".equalsIgnoreCase(actual.get(1)[0]));
-        Assert.assertTrue("3.24".equalsIgnoreCase(actual.get(1)[1]));
+        List<Map<String,String>> actual = jerkParser.splitAndGet(jerkSON, "name", "price");
+        Assert.assertTrue("Milk".equalsIgnoreCase(actual.get(0).get("name")));
+        Assert.assertTrue("3.23".equalsIgnoreCase(actual.get(0).get("price")));
+        Assert.assertTrue("Milk2".equalsIgnoreCase(actual.get(1).get("name")));
+        Assert.assertTrue("3.24".equalsIgnoreCase(actual.get(1).get("price")));
     }
 }
