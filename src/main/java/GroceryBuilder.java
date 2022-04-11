@@ -1,4 +1,4 @@
-public class GroceryBuilder {
+public class GroceryBuilder implements Builder{
     private String name = "";
     private Double price = 0.0;
     private String type = "";
