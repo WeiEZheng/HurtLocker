@@ -26,4 +26,20 @@ public class Grocery {
     public String getExpirationDate() {
         return expirationDate;
     }
+
+    public boolean isNull(){
+        if (name.equals("") | price.equals("0.00") | price.equals("") | type.equals("")| expirationDate.equals(""))
+            return true;
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Grocery{" +
+                "name='" + name + '\'' +
+                ", price='" + price + '\'' +
+                ", type='" + type + '\'' +
+                ", expirationDate='" + expirationDate + '\'' +
+                '}';
+    }
 }

@@ -19,4 +19,9 @@ public class GroceryTest extends TestCase {
         Assert.assertEquals(type, actualType);
         Assert.assertEquals(expirationDate, actualExpirationDate);
     }
+
+    public void testIsNull() {
+        Grocery grocery = new Grocery("", price, type, expirationDate);
+        Assert.assertTrue(grocery.isNull());
+    }
 }

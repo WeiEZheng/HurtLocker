@@ -13,6 +13,7 @@ public class Main {
     public static void main(String[] args) throws Exception{
         String output = (new Main()).readRawDataToString();
         JerkSON jerkSON = new JerkSON(output);
-        JerkParser jerkParser = new JerkParser();
+        JerkParserGrocery jerkParserGrocery = new JerkParserGrocery();
+        jerkParserGrocery.doEverything(jerkSON);
     }
 }
