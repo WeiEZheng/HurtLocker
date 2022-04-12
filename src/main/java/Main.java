@@ -14,6 +14,6 @@ public class Main {
         String output = (new Main()).readRawDataToString();
         JerkSON jerkSON = new JerkSON(output);
         JerkParserGrocery jerkParserGrocery = new JerkParserGrocery();
-        jerkParserGrocery.doEverything(jerkSON);
+        System.out.print(jerkParserGrocery.doEverything(jerkSON));
     }
 }

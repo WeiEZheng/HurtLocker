@@ -4,13 +4,13 @@ import java.util.regex.Pattern;
 
 public class JerkParserGrocery extends JerkParser<Grocery>{
 
-    public void doEverything(JerkSON jerkSON){
+    public String doEverything(JerkSON jerkSON){
         Grocery[] groceries= buildToObj(new GroceryBuilder(),
                 splitAndGet(jerkSON, "name", "price", "type", "expiration"));
-        tabulate(groceries);
+        return tabulate(groceries);
     }
 
-    public void tabulate(Grocery[] groceries){
+    public String tabulate(Grocery[] groceries){
         Integer error = 0;
         Set<String> seenName = new TreeSet<>();
         Set<String> seenPrice = new HashSet<>();
@@ -44,22 +44,27 @@ public class JerkParserGrocery extends JerkParser<Grocery>{
                 }
             }
         }
+        String result = "";
         for (String s: seenName) {
-            printWithFormat(s, prices.get(s), count);
+            result+=printWithFormat(s, prices.get(s), count);
         }
-        System.out.printf("%-15s%10s: %d times\n", "Errors", "Seen", error);
+        result +=String.format("%-15s%10s: %d times\n", "Errors", "Seen", error);
+        //using string.format rather than system.out.printf to better automate test
+        return result;
     }
 
-    public void printWithFormat(String name, List<String> prices, Map<String, Integer> count) {
+    public String printWithFormat(String name, List<String> prices, Map<String, Integer> count) {
         String doubleLine = "=============";
         String line = "-------------";
-        System.out.printf("Name:%8s%13s: %s times\n", name, "Seen", count.get(name));
-        System.out.printf("%s%9s%s\n", doubleLine, "", doubleLine);
+        String result = "";
+        result +=String.format("Name:%8s%13s: %s times\n", name, "Seen", count.get(name));
+        result +=String.format("%s%9s%s\n", doubleLine, "", doubleLine);
         for (String price: prices) {
-            System.out.printf("Price:%7s%13s: %s times\n", price, "Seen", count.get(name+"#"+price));
-            System.out.printf("%s%9s%s\n", line, "", line);
+            result +=String.format("Price:%7s%13s: %s times\n", price, "Seen", count.get(name+"#"+price));
+            result +=String.format("%s%9s%s\n", line, "", line);
         }
-        System.out.println();
+        result+="\n";
+        return result;
     }
 
     public String correctName(String name) {
