@@ -79,6 +79,6 @@ public class JerkParserGrocery extends JerkParser<Grocery>{
         match = apple.matcher(name);
         if(match.find())
             return "Apples";
-        return "null";
+        return name;
     }
 }
