@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,8 +14,18 @@ public class JerkParser<T> {
     }
 
     public String[] split (JerkSON jerkSON){
-        Pattern pattern = Pattern.compile("##");
-        return pattern.split(jerkSON.getJerkString());
+        Pattern pattern = Pattern.compile("(?<=##|^).*?(?=##|$)");
+        Matcher matcher = pattern.matcher(jerkSON.getJerkString());
+        Integer count = 0;
+        List<String> result = new ArrayList<>();
+        while (matcher.find()){
+            if (!matcher.group().equals("")) {
+                result.add(matcher.group());
+                count++;
+            }
+        }
+        return result.toArray(new String[count]);
+//        return pattern.split(jerkSON.getJerkString());
     }
 
     public Map<String,String> get(String jerkSONString, String ... fieldNames){
