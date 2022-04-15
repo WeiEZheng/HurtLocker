@@ -8,7 +8,11 @@ public class JerkParser<T> {
         String[] jerkSONStrings = split(jerkSON);
         List<Map<String,String>> result = new ArrayList<>();
         for (int i=0; i< jerkSONStrings.length;i++){
-            result.add(get(jerkSONStrings[i],fieldNames));
+            try {
+                result.add(get(jerkSONStrings[i],fieldNames));
+            } catch (ItemException e){
+                e.incCount();
+            }
         }
         return result;
     }
@@ -28,7 +32,7 @@ public class JerkParser<T> {
 //        return pattern.split(jerkSON.getJerkString());
     }
 
-    public Map<String,String> get(String jerkSONString, String ... fieldNames){
+    public Map<String,String> get(String jerkSONString, String ... fieldNames) throws ItemException {
         String[] fields = fieldNames;
         Map<String,String> result = new HashMap<>();
         for (int i = 0; i<fields.length; i++) {
@@ -37,11 +41,14 @@ public class JerkParser<T> {
         return result;
     }
 
-    public String get(String jerkSONString, String fieldName){
+    public String get(String jerkSONString, String fieldName) throws ItemException {
         Pattern pattern = Pattern.compile("(?<="+fieldName+"[;:%@*^]).*?(?=[;:%@*^]|$)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(jerkSONString);
         if (matcher.find()){
-            return matcher.group();
+            if (matcher.group().equals(""))
+                throw new ItemException();
+            else
+                return matcher.group();
         }
         return "";
     }

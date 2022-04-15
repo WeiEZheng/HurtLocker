@@ -11,36 +11,29 @@ public class JerkParserGrocery extends JerkParser<Grocery>{
     }
 
     public String tabulate(Grocery[] groceries){
-        Integer error = 0;
-        Set<String> seenName = new TreeSet<>();
+        Set<String> seenName = new HashSet<>();
         Set<String> seenPrice = new HashSet<>();
         Map<String, Integer> count = new HashMap<>();
         Map<String, List<String>> prices = new HashMap<>();
-        for (int i = 0; i < groceries.length; i++){
-            if (groceries[i].isNull()){
-                error++;
-            }
-            else{
-                String name = correctName(groceries[i].getName());
-                if (seenName.add(name)) {
-                    count.put(name, 1);
-                    count.put(name+"#"+groceries[i].getPrice(), 1);
-                    seenPrice.add(name+"#"+groceries[i].getPrice());
-                    List<String> tempList = new ArrayList<>();
+        for (int i = 0; i < groceries.length; i++) {
+            String name = correctName(groceries[i].getName());
+            if (seenName.add(name)) {
+                count.put(name, 1);
+                count.put(name + "#" + groceries[i].getPrice(), 1);
+                seenPrice.add(name + "#" + groceries[i].getPrice());
+                List<String> tempList = new ArrayList<>();
+                tempList.add(groceries[i].getPrice());
+                prices.put(name, tempList);
+            } else {
+                count.put(name, count.get(name) + 1);
+                if (seenPrice.add(name + "#" + groceries[i].getPrice())) {
+                    count.put(name + "#" + groceries[i].getPrice(), 1);
+                    List<String> tempList = prices.get(name);
                     tempList.add(groceries[i].getPrice());
                     prices.put(name, tempList);
-                }else {
-                    count.put(name, count.get(name)+1);
-                    if (seenPrice.add(name+"#"+groceries[i].getPrice())) {
-                        count.put(name+"#"+groceries[i].getPrice(), 1);
-                        List<String> tempList = prices.get(name);
-                        tempList.add(groceries[i].getPrice());
-                        prices.put(name, tempList);
-                    }
-                    else {
-                        count.put(name + "#" + groceries[i].getPrice(),
-                                count.get(name + "#" + groceries[i].getPrice()) + 1);
-                    }
+                } else {
+                    count.put(name + "#" + groceries[i].getPrice(),
+                            count.get(name + "#" + groceries[i].getPrice()) + 1);
                 }
             }
         }
@@ -48,7 +41,7 @@ public class JerkParserGrocery extends JerkParser<Grocery>{
         for (String s: seenName) {
             result+=printWithFormat(s, prices.get(s), count);
         }
-        result +=String.format("%-15s%10s: %d times\n", "Errors", "Seen", error);
+        result +=String.format("%-15s%10s: %d times\n", "Errors", "Seen", ItemException.errorCount());
         //using string.format rather than system.out.printf to better automate test
         return result;
     }
