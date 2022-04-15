@@ -32,14 +32,4 @@ public class Grocery {
             return true;
         return false;
     }
-
-    @Override
-    public String toString() {
-        return "Grocery{" +
-                "name='" + name + '\'' +
-                ", price='" + price + '\'' +
-                ", type='" + type + '\'' +
-                ", expirationDate='" + expirationDate + '\'' +
-                '}';
-    }
 }

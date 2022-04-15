@@ -35,4 +35,8 @@ public class JerkParserTest extends TestCase {
         Assert.assertTrue("Milk2".equalsIgnoreCase(actual.get(1).get("name")));
         Assert.assertTrue("3.24".equalsIgnoreCase(actual.get(1).get("price")));
     }
+    public void testGet1() {
+        JerkSON jerkSON = new JerkSON("");
+        Assert.assertTrue("".equalsIgnoreCase(jerkParser.get(jerkSON.getJerkString(),"name")));
+    }
 }
